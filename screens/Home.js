@@ -21,7 +21,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     getResturantsFromYelp();
-  }, [district, activeTab]);
+  }, [activeTab]);
 
   const getResturantsFromYelp = () => {
     const yelpUrl = `https://api.yelp.com/v3/businesses/search?term=resturants&location=${district}`;
@@ -35,27 +35,36 @@ export default function Home({ navigation }) {
     return fetch(yelpUrl, apiOptions)
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.businesses);
+        console.log(data.businesses);
         setResturantData(
-          data.businesses.filter((biz) =>
-            biz.transactions.includes(activeTab.toLowerCase())
+          data.businesses.filter(
+            (biz) =>
+              biz.transactions?.length > 0
+                ? biz.transactions.includes(activeTab.toLowerCase())
+                : true // Hong Kong => X transactions data
           )
         );
       });
+  };
+
+  const handleSearch = () => {
+    console.log(district);
+
+    getResturantsFromYelp();
   };
 
   return (
     <SafeAreaView style={{ backgroundColor: "#eee", flex: 1 }}>
       <View style={{ backgroundColor: "#fff", padding: 15 }}>
         <HeaderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        <SearchBar setDistrict={setDistrict} />
+        <SearchBar setDistrict={setDistrict} handleSearch={handleSearch} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Categories />
         <Resturants data={resturantData} navigation={navigation} />
       </ScrollView>
       <Divider width={1} />
-      <BottomTabs />
+      <BottomTabs navigation={navigation} />
     </SafeAreaView>
   );
 }

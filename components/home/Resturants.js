@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function Resturants({ navigation, ...props }) {
+  useEffect(() => {
+    console.log("props.data::", props.data);
+  }, [props.data]);
   return (
     <>
       {props.data?.map((item, i) => (

@@ -42,6 +42,7 @@ export default function ViewCart({ navigation }) {
   const { items, resturantName } = useSelector(
     (state) => state.cartReducer.selectedItems
   );
+
   const total = items
     .map((item) => Number(item.price.replace("$", "")))
     .reduce((prev, curr) => prev + curr, 0);
@@ -63,26 +64,23 @@ export default function ViewCart({ navigation }) {
         title: item.title,
         description: item.description,
         price: item.price,
-        img: item.image,
+        image: item.image,
       });
     });
 
     // console.log(arr);
 
     if (arr.length > 0) {
-      const { data, error } = await supabase
-        .from("orders")
-        .insert(arr)
-        .then(() => {
-          setTimeout(() => {
-            setLoading(false);
-            navigation.navigate("OrderCompleted");
-          }, 2500);
-        });
+      const { data, error } = await supabase.from("orders").insert(arr);
+      console.log("res:::", data);
 
-      if (error) console.log(error.message);
-      // else {
-      // }
+      if (data) {
+        // console.log("res:::", res);
+        setTimeout(() => {
+          setLoading(false);
+          navigation.navigate("OrderCompleted");
+        }, 2500);
+      } else if (error) console.log(error.message);
     }
   };
 
@@ -144,7 +142,7 @@ export default function ViewCart({ navigation }) {
       >
         <CheckoutModalContent />
       </Modal>
-      {total ? (
+      {total && !loading ? (
         <View
           style={{
             flexDirection: "row",

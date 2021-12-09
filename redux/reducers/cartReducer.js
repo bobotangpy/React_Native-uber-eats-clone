@@ -28,6 +28,9 @@ let cartReducer = (state = defaultState, action) => {
       console.log("newState", newState);
       return newState;
 
+    case "CLEAR_CART":
+      return defaultState;
+
     default:
       return state;
   }
