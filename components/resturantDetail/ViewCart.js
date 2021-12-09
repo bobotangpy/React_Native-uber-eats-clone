@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useSelector } from "react-redux";
 import LottieView from "lottie-react-native";
 import OrderItem from "./OrderItem";
@@ -87,9 +95,13 @@ export default function ViewCart({ navigation }) {
   const CheckoutModalContent = () => {
     return (
       <>
-        <View style={styles.modal}>
-          <View style={styles.modalCheckoutContainer}>
-            <Text style={styles.resturantName}>{resturantName}</Text>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modal}></View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.modalCheckoutContainer}>
+          <Text style={styles.resturantName}>{resturantName}</Text>
+          <ScrollView>
             {items.map((item, i) => (
               <OrderItem key={i} item={item} />
             ))}
@@ -98,34 +110,34 @@ export default function ViewCart({ navigation }) {
               <Text style={styles.subtotalText}>Subtotal</Text>
               <Text>{totalUSD}</Text>
             </View>
+          </ScrollView>
 
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-              <TouchableOpacity
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity
+              style={{
+                marginTop: 20,
+                backgroundColor: "#000",
+                alignItems: "center",
+                padding: 13,
+                borderRadius: 30,
+                width: 300,
+                position: "relative",
+              }}
+              onPress={() => addOrderToDB()}
+            >
+              <Text style={{ color: "#fff", fontSize: 20 }}>Checkout</Text>
+              <Text
                 style={{
-                  marginTop: 20,
-                  backgroundColor: "#000",
-                  alignItems: "center",
-                  padding: 13,
-                  borderRadius: 30,
-                  width: 300,
-                  position: "relative",
+                  color: "#fff",
+                  position: "absolute",
+                  fontSize: 15,
+                  right: 18,
+                  top: 17,
                 }}
-                onPress={() => addOrderToDB()}
               >
-                <Text style={{ color: "#fff", fontSize: 20 }}>Checkout</Text>
-                <Text
-                  style={{
-                    color: "#fff",
-                    position: "absolute",
-                    fontSize: 15,
-                    right: 18,
-                    top: 17,
-                  }}
-                >
-                  {total ? totalUSD : ""}
-                </Text>
-              </TouchableOpacity>
-            </View>
+                {total ? totalUSD : ""}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </>

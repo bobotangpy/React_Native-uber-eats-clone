@@ -46,7 +46,7 @@ export default function MenuItem({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      style={{ marginBottom: 50 }}
+      style={{ marginBottom: 60 }}
     >
       {foods.map((item, index) => (
         <View key={index}>
